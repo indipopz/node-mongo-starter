@@ -1,6 +1,7 @@
 const express = require('express');
 const compression = require('compression');
 const session = require('express-session');
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv').config();
 const chalk = require('chalk');
@@ -8,6 +9,7 @@ const lusca = require('lusca');
 const MongoStore = require('connect-mongo')(session);
 const flash = require('express-flash');
 const path = require('path');
+const expressValidator = require('express-validator');
 const sass = require('node-sass-middleware');
 
 const app = express();
@@ -29,6 +31,9 @@ mongoose.connection.on('error', (err) => {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 app.use(express.static(path.join(__dirname, 'public')))
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(expressValidator());
 app.use(session({
     resave: true,
     saveUninitialized: true,
@@ -39,6 +44,7 @@ app.use(session({
         autoReconnect: true,
     })
 }));
+app.use(flash());
 app.use((req, res, next) => {
     if (req.path === '/api/upload') {
         next();
@@ -52,6 +58,7 @@ app.use(lusca.xssProtection(true));
 
 app.get('/login', authController.getLogin);
 app.get('/register', authController.getRegister);
+app.post('/register', authController.postRegister);
 app.get('/forgot-password', authController.forgotPassword);
 
 app.listen(port, ()=>`Server is running on port ${port}!`);

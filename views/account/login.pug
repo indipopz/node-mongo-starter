@@ -8,7 +8,7 @@ html
             .card.card-login.mx-auto.mt-5
                 .card-header Login
                 .card-body
-                    form(method='POST')
+                    form(id="login-form", method='POST')
                         input(type='hidden', name='_csrf', value=_csrf)
                         .form-group
                             .form-label-group
@@ -24,7 +24,7 @@ html
                                 label
                                     input(type="checkbox" value="remember-me")
                                     | Remember Password
-                        a(class="btn btn-primary btn-block" href="index.html") Login
+                        button(class="btn btn-primary btn-block" type="submit") Login
 
                         .text-center
                             a(class="d-block small mt-3" href="/register") Register an Account
