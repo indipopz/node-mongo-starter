@@ -1,0 +1,26 @@
+doctype html
+html
+    head
+        include partials/head
+
+    body(id="page-top")
+        include partials/header
+        #wrapper
+            include partials/sidebar
+            #content-wrapper
+                .container-fluid
+                    <!-- Breadcrumbs-->
+                    ol.breadcrumb
+                        li.breadcrumb-item
+                            a(href="index.html") Dashboard
+                        li(class="breadcrumb-item active") Blank Page
+                    include partials/flash
+                    block content
+                include partials/footer
+
+        <!-- Scroll to Top Button-->
+        a(class="scroll-to-top rounded" href="#page-top")
+            i.fas.fa-angle-up
+
+        include partials/logout_modal
+        include partials/javascript

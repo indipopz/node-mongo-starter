@@ -1,0 +1,28 @@
+{
+  "name": "node-login-app",
+  "version": "1.0.0",
+  "description": "Sample App for login setup with Node js and Mongo DB.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "node",
+    "mongodb"
+  ],
+  "author": "Nitish Mallick",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "compression": "^1.7.3",
+    "connect-mongo": "^2.0.1",
+    "dotenv": "^6.1.0",
+    "express": "^4.16.4",
+    "express-flash": "0.0.2",
+    "express-session": "^1.15.6",
+    "lusca": "^1.6.1",
+    "mongoose": "^5.3.5",
+    "node-sass-middleware": "^0.11.0",
+    "pug": "^2.0.3"
+  }
+}
