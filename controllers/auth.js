@@ -2,6 +2,7 @@ const { promisify } = require('util');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const passport = require('passport');
+const { check, validationResult, body } = require('express-validator/check');
 const User = require('../models/User');
 
 const randomBytesAsync = promisify(crypto.randomBytes);
@@ -39,14 +40,10 @@ exports.getRegister = (req, res) => {
  * Register page.
  */
 exports.postRegister = (req, res, next) => {
-    // req.assert('email', 'Email is not valid').isEmail();
-    // req.assert('password', 'Password must be at least 4 characters long').len(4);
-    // req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
-    // req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
-
-    const errors = req.validationErrors();
-    if (errors) {
-        req.flash('errors', errors);
+    const errors = validationResult(req);
+    console.log(errors.array());
+    if (!errors.isEmpty()) {
+        req.flash('errors', errors.array());
         return res.redirect('/register');
     }
 
@@ -76,6 +73,18 @@ exports.postRegister = (req, res, next) => {
             });
         });
     });
+};
+
+exports.validate = (method) => {
+    switch (method) {
+        case 'registerUser': {
+            return [
+                check('email').isEmail().withMessage('Please enter a valid email.'),
+                check('password').isLength({ min: 5 }).withMessage('Password must be 5 characters long'),
+                check('confirmPassword').equals('password').withMessage('Confirm password should be equal to the password')
+            ];
+        }
+    }
 };
 
 /**

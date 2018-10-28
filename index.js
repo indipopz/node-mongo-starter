@@ -58,7 +58,10 @@ app.use(lusca.xssProtection(true));
 
 app.get('/login', authController.getLogin);
 app.get('/register', authController.getRegister);
-app.post('/register', authController.postRegister);
+app.post('/register',
+    authController.validate('registerUser'),
+    authController.postRegister
+);
 app.get('/forgot-password', authController.forgotPassword);
 
 app.listen(port, ()=>`Server is running on port ${port}!`);
