@@ -95,6 +95,7 @@ app.post('/register',
     authController.validate('registerUser'),
     authController.postRegister
 );
+app.get('/logout', authController.logout);
 app.get('/forgot-password', authController.forgotPassword);
 
 app.listen(port, ()=>`Server is running on port ${port}!`);

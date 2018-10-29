@@ -5,9 +5,8 @@
  * Login page.
  */
 exports.getIndex = (req, res) => {
-	console.log(req.user);
-    if (req.user) {
-        return res.redirect('/');
+    if(!req.user){
+        return res.redirect('/login')
     }
     res.render('home/index', {
         title: 'index'
