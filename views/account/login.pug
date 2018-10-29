@@ -8,6 +8,7 @@ html
             .card.card-login.mx-auto.mt-5
                 .card-header Login
                 .card-body
+                    include ../partials/flash
                     form(id="login-form", method='POST')
                         input(type='hidden', name='_csrf', value=_csrf)
                         .form-group
