@@ -28,7 +28,18 @@
     "mongoose": "^5.3.5",
     "node-sass-middleware": "^0.11.0",
     "nodemailer": "^4.6.8",
+    "nodemon": "^1.18.5",
+    "npm": "^6.4.1",
     "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1",
+    "passport-github": "^1.1.0",
+    "passport-google-oauth": "^1.0.0",
+    "passport-instagram": "^1.0.0",
+    "passport-linkedin-oauth2": "^1.5.0",
+    "passport-local": "^1.0.0",
+    "passport-oauth": "^1.0.0",
+    "passport-openid": "^0.4.0",
+    "passport-twitter": "^1.0.4",
     "pug": "^2.0.3",
     "util": "^0.11.0"
   }

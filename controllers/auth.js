@@ -75,13 +75,13 @@ exports.postRegister = (req, res, next) => {
     });
 };
 
-exports.validate = (method) => {
+exports.validate = (method, req) => {
+    console.log(req);
     switch (method) {
         case 'registerUser': {
             return [
                 check('email').isEmail().withMessage('Please enter a valid email.'),
-                check('password').isLength({ min: 5 }).withMessage('Password must be 5 characters long'),
-                check('confirmPassword').equals('password').withMessage('Confirm password should be equal to the password')
+                check('password').isLength({ min: 5 }).withMessage('Password must be 5 characters long')
             ];
         }
     }
