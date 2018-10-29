@@ -89,6 +89,7 @@ app.use((req, res, next) => {
 
 app.get('/', homeController.getIndex);
 app.get('/login', authController.getLogin);
+app.post('/login', authController.postLogin);
 app.get('/register', authController.getRegister);
 app.post('/register',
     authController.validate('registerUser'),
