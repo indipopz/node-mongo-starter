@@ -91,10 +91,7 @@ app.get('/', homeController.getIndex);
 app.get('/login', authController.getLogin);
 app.post('/login', authController.postLogin);
 app.get('/register', authController.getRegister);
-app.post('/register',
-    authController.validate('registerUser'),
-    authController.postRegister
-);
+app.post('/register', authController.postRegister);
 app.get('/logout', authController.logout);
 app.get('/forgot-password', authController.forgotPassword);
 
