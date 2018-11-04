@@ -88,11 +88,19 @@ app.use((req, res, next) => {
 });
 
 app.get('/', homeController.getIndex);
+
 app.get('/login', authController.getLogin);
 app.post('/login', authController.postLogin);
+
 app.get('/register', authController.getRegister);
 app.post('/register', authController.postRegister);
+
 app.get('/logout', authController.logout);
-app.get('/forgot-password', authController.forgotPassword);
+
+app.get('/forgot-password', authController.getForgotPassword);
+app.post('/forgot-password', authController.postForgotPassword);
+
+app.get('/reset-password/:token', authController.getResetPassword);
+app.post('/reset-password/:token', authController.postResetPassword);
 
 app.listen(port, ()=>`Server is running on port ${port}!`);
