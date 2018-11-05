@@ -9,13 +9,16 @@ html
             include partials/sidebar
             #content-wrapper
                 .container-fluid
+                
                     <!-- Breadcrumbs-->
-                    ol.breadcrumb
-                        li.breadcrumb-item
-                            a(href="index.html") Dashboard
-                        li(class="breadcrumb-item active") Blank Page
+                    include partials/breadcrumb
+
+                    <!-- Flash Message-->
                     include partials/flash
+
+                    <!-- Content Block-->
                     block content
+
                 include partials/footer
 
         <!-- Scroll to Top Button-->

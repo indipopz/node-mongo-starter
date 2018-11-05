@@ -88,6 +88,7 @@ app.use((req, res, next) => {
 });
 
 app.get('/', homeController.getIndex);
+app.get('/dashboard', homeController.getDashboard);
 
 app.get('/login', authController.getLogin);
 app.post('/login', authController.postLogin);

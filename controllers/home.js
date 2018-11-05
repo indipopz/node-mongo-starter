@@ -12,3 +12,19 @@ exports.getIndex = (req, res) => {
         title: 'index'
     });
 };
+
+
+
+/**
+ * GET /index
+ * Login page.
+ */
+exports.getDashboard = (req, res) => {
+    if(!req.user){
+        return res.redirect('/login')
+    }
+    res.render('home/dashboard', {
+        title: 'Dashboard',
+        breadcrumbs: {'Dashboard' : '/dashboard'}
+    });
+};
