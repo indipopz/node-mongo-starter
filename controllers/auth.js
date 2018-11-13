@@ -338,3 +338,16 @@ exports.postResetPassword = (req, res, next) => {
         .then(() => { if (!res.finished) res.redirect('/'); })
         .catch(err => next(err));
 };
+
+/**
+ * GET /Register
+ * Register page.
+ */
+exports.getChangePassword = (req, res) => {
+    if (!req.user) {
+        return res.redirect('/login');
+    }
+    res.render('account/change-password', {
+        title: 'Change Password'
+    });
+};

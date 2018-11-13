@@ -106,4 +106,6 @@ app.post('/forgot-password', authController.postForgotPassword);
 app.get('/reset-password/:token', authController.getResetPassword);
 app.post('/reset-password/:token', authController.postResetPassword);
 
+app.get('/change-password/', authController.getChangePassword);
+
 app.listen(port, ()=>`Server is running on port ${port}!`);
