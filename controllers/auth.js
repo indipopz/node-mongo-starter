@@ -351,3 +351,96 @@ exports.getChangePassword = (req, res) => {
         title: 'Change Password'
     });
 };
+
+/**
+ * POST /change-password
+ * Process the reset password request.
+ */
+exports.postChangePassword = (req, res, next) => {
+    req.assert('currentPassword', 'Current password cannot be blank').notEmpty();
+    req.assert('newPassword', 'New Password must be at least 4 characters long.').len(4);
+    req.assert('confirmNewPassword', 'Confirm New Passwords must match New Password').equals(req.body.newPassword);
+
+    const errors = req.validationErrors();
+
+    if (errors) {
+        req.flash('errors', errors);
+        return res.redirect('back');
+    }
+
+    const changePassword = () =>
+        User
+            .findOne({ _id: req.user._id })
+            .then((user) => {
+                if (!user) {
+                    req.flash('errors', { msg: 'User not found.' });
+                    return res.redirect('back');
+                }
+                console.log(req.body.currentPassword);
+                user.comparePassword(req.body.currentPassword, (err, isMatch) => {
+                   if(err){
+                       req.flash('errors', { msg: 'User not found.' });
+                       return res.redirect('back');
+                   }
+                   if(!isMatch){
+                       req.flash('errors', { msg: 'Current password is wrong.' });
+                       return res.redirect('back');
+                   }
+                });
+                user.password = req.body.newPassword;
+                return user.save().then(() => new Promise((resolve, reject) => {
+                    req.logIn(user, (err) => {
+                        if (err) { return reject(err); }
+                        resolve(user);
+                    });
+                }));
+            });
+
+    const sendResetPasswordEmail = (user) => {
+        if (!user) { return; }
+        let transporter = nodemailer.createTransport({
+            service: 'Gmail',
+            auth: {
+                user: process.env.GMAIL_USER,
+                pass: process.env.GMAIL_PASSWORD
+            }
+        });
+        const mailOptions = {
+            to: user.email,
+            from: 'admin@nodemongostarter.com',
+            subject: 'Your Node Mongo Starter password has been changed',
+            text: `Hello,\n\nThis is a confirmation that the password for your account ${user.email} has just been changed.\n`
+        };
+        return transporter.sendMail(mailOptions)
+            .then(() => {
+                req.flash('success', { msg: 'Success! Your password has been changed.' });
+            })
+            .catch((err) => {
+                if (err.message === 'self signed certificate in certificate chain') {
+                    console.log('WARNING: Self signed certificate in certificate chain. Retrying with the self signed certificate. Use a valid certificate if in production.');
+                    transporter = nodemailer.createTransport({
+                        service: 'Gmail',
+                        auth: {
+                            user: process.env.GMAIL_USER,
+                            pass: process.env.GMAIL_PASSWORD
+                        },
+                        tls: {
+                            rejectUnauthorized: false
+                        }
+                    });
+                    return transporter.sendMail(mailOptions)
+                        .then(() => {
+                            req.flash('success', { msg: 'Success! Your password has been changed.' });
+                        });
+                }
+                console.log('ERROR: Could not send password reset confirmation email after security downgrade.\n', err);
+                req.flash('warning', { msg: 'Your password has been changed, however we were unable to send you a confirmation email. We will be looking into it shortly.' });
+                return err;
+            });
+    };
+
+    changePassword()
+        .then(sendResetPasswordEmail)
+        .then(() => { if (!res.finished) res.redirect('/'); })
+        .catch(err => next(err));
+};
