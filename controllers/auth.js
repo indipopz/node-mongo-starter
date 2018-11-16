@@ -376,7 +376,6 @@ exports.postChangePassword = (req, res, next) => {
                     req.flash('errors', { msg: 'User not found.' });
                     return res.redirect('back');
                 }
-                console.log(req.body.currentPassword);
                 user.comparePassword(req.body.currentPassword, (err, isMatch) => {
                    if(err){
                        req.flash('errors', { msg: 'User not found.' });
