@@ -6,7 +6,7 @@
  */
 exports.getIndex = (req, res) => {
     if(!req.user){
-        return res.redirect('/login')
+        return res.redirect('/auth/login')
     }
     res.render('home/index', {
         title: 'index'
@@ -16,12 +16,12 @@ exports.getIndex = (req, res) => {
 
 
 /**
- * GET /index
- * Login page.
+ * GET /dashboard
+ * Dashboard page.
  */
 exports.getDashboard = (req, res) => {
     if(!req.user){
-        return res.redirect('/login')
+        return res.redirect('/auth/login')
     }
     res.render('home/dashboard', {
         title: 'Dashboard',

@@ -26,8 +26,8 @@ const port = process.env.PORT;
 /**
  * Controllers (route handlers).
  */
-const authController = require('./controllers/auth');
-const homeController = require('./controllers/home');
+const authRoutes = require('./routes/auth-routes');
+const homeRoutes = require('./routes/home-routes');
 
 
 mongoose.set('useFindAndModify', false);
@@ -89,24 +89,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/', homeController.getIndex);
-app.get('/dashboard', homeController.getDashboard);
+app.use('/auth', authRoutes);
+app.use('/home', homeRoutes);
 
-app.get('/login', authController.getLogin);
-app.post('/login', authController.postLogin);
-
-app.get('/register', authController.getRegister);
-app.post('/register', authController.postRegister);
-
-app.get('/logout', authController.logout);
-
-app.get('/forgot-password', authController.getForgotPassword);
-app.post('/forgot-password', authController.postForgotPassword);
-
-app.get('/reset-password/:token', authController.getResetPassword);
-app.post('/reset-password/:token', authController.postResetPassword);
-
-app.get('/change-password/', authController.getChangePassword);
-app.post('/change-password/', authController.postChangePassword);
 
 app.listen(port, ()=>`Server is running on port ${port}!`);

@@ -14,7 +14,7 @@ const randomBytesAsync = promisify(crypto.randomBytes);
  */
 exports.getLogin = (req, res) => {
     if (req.user) {
-        return res.redirect('/');
+        return res.redirect('/home');
     }
     res.render('account/login', {
         title: 'Login'
@@ -35,19 +35,19 @@ exports.postLogin = (req, res, next) => {
 
   if (errors) {
     req.flash('errors', errors);
-    return res.redirect('/login');
+    return res.redirect('/auth/login');
   }
 
   passport.authenticate('local', (err, user, info) => {
     if (err) { return next(err); }
     if (!user) {
       req.flash('errors', info);
-      return res.redirect('/login');
+      return res.redirect('/auth/login');
     }
     req.logIn(user, (err) => {
       if (err) { return next(err); }
       req.flash('success', { msg: 'Success! You are logged in.' });
-      res.redirect(req.session.returnTo || '/');
+      res.redirect(req.session.returnTo || '/home');
     });
   })(req, res, next);
 };
@@ -59,7 +59,7 @@ exports.postLogin = (req, res, next) => {
  */
 exports.getRegister = (req, res) => {
     if (req.user) {
-        return res.redirect('/');
+        return res.redirect('/home');
     }
     res.render('account/register', {
         title: 'Register'
@@ -80,7 +80,7 @@ exports.postRegister = (req, res, next) => {
     const errors = req.validationErrors();
     if (errors) {
         req.flash('errors', errors);
-        return res.redirect('/register');
+        return res.redirect('/auth/register');
     }
 
     // noinspection JSAnnotator
@@ -97,12 +97,12 @@ exports.postRegister = (req, res, next) => {
         if (err) { return next(err); }
         if (existingUser) {
             req.flash('errors', { msg: 'Account with that email address already exists.' });
-            return res.redirect('/register');
+            return res.redirect('/auth/register');
         }
         user.save((err) => {
             if (err) { return next(err); }
             req.flash('success', { msg: 'Congratulation !! You have been successfully registered.' });
-            return res.redirect('/login');
+            return res.redirect('/auth/login');
         });
     });
 };
@@ -128,7 +128,7 @@ exports.logout = (req, res) => {
     req.session.destroy((err) => {
         if (err) console.log('Error : Failed to destroy the session during logout.', err);
         req.user = null;
-        res.redirect('/');
+        res.redirect('/home');
     });
 };
 
@@ -139,7 +139,7 @@ exports.logout = (req, res) => {
  */
 exports.getForgotPassword = (req, res) => {
     if (req.user) {
-        return res.redirect('/');
+        return res.redirect('/home');
     }
     res.render('account/forgot-password', {
         title: 'Forgot Password'
@@ -158,7 +158,7 @@ exports.postForgotPassword = (req, res, next) => {
 
     if (errors) {
         req.flash('errors', errors);
-        return res.redirect('/forgot-password');
+        return res.redirect('/auth/forgot-password');
     }
 
     const createRandomToken = randomBytesAsync(16)
@@ -194,7 +194,7 @@ exports.postForgotPassword = (req, res, next) => {
             subject: 'Reset your password on Node Mongo Starter',
             text: `You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\n
         Please click on the following link, or paste this into your browser to complete the process:\n\n
-        http://${req.headers.host}/reset-password/${token}\n\n
+        http://${req.headers.host}/auth/reset-password/${token}\n\n
         If you did not request this, please ignore this email and your password will remain unchanged.\n`
         };
         return transporter.sendMail(mailOptions)
@@ -228,7 +228,7 @@ exports.postForgotPassword = (req, res, next) => {
     createRandomToken
         .then(setRandomToken)
         .then(sendForgotPasswordEmail)
-        .then(() => res.redirect('/forgot-password'))
+        .then(() => res.redirect('/auth/forgot-password'))
         .catch(next);
 };
 
@@ -238,7 +238,7 @@ exports.postForgotPassword = (req, res, next) => {
  */
 exports.getResetPassword = (req, res, next) => {
     if (req.isAuthenticated()) {
-        return res.redirect('/');
+        return res.redirect('/home');
     }
     User
         .findOne({ passwordResetToken: req.params.token })
@@ -247,7 +247,7 @@ exports.getResetPassword = (req, res, next) => {
             if (err) { return next(err); }
             if (!user) {
                 req.flash('errors', { msg: 'Password reset token is invalid or has expired.' });
-                return res.redirect('/forgot-password');
+                return res.redirect('/auth/forgot-password');
             }
             res.render('account/reset-password', {
                 title: 'Reset Password'
@@ -335,7 +335,7 @@ exports.postResetPassword = (req, res, next) => {
 
     resetPassword()
         .then(sendResetPasswordEmail)
-        .then(() => { if (!res.finished) res.redirect('/'); })
+        .then(() => { if (!res.finished) res.redirect('/home'); })
         .catch(err => next(err));
 };
 
@@ -345,7 +345,7 @@ exports.postResetPassword = (req, res, next) => {
  */
 exports.getChangePassword = (req, res) => {
     if (!req.user) {
-        return res.redirect('/login');
+        return res.redirect('/auth/login');
     }
     res.render('account/change-password', {
         title: 'Change Password'
@@ -440,6 +440,6 @@ exports.postChangePassword = (req, res, next) => {
 
     changePassword()
         .then(sendResetPasswordEmail)
-        .then(() => { if (!res.finished) res.redirect('/'); })
+        .then(() => { if (!res.finished) res.redirect('/home'); })
         .catch(err => next(err));
 };
