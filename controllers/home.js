@@ -25,6 +25,6 @@ exports.getDashboard = (req, res) => {
     }
     res.render('home/dashboard', {
         title: 'Dashboard',
-        breadcrumbs: {'Dashboard' : '/dashboard', 'Overview': '#'}
+        breadcrumbs: {'Dashboard' : '/home/dashboard', 'Overview': '#'}
     });
 };
