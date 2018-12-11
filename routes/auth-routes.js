@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const passport = require('passport');
 const authController = require('./../controllers/auth');
 
 // App login
@@ -18,6 +19,11 @@ router.post('/reset-password/:token', authController.postResetPassword);
 
 router.get('/change-password/', authController.getChangePassword);
 router.post('/change-password/', authController.postChangePassword);
+
+router.get('/google', passport.authenticate('google', { scope: 'profile email' }));
+router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/auth/login' }), (req, res) => {
+    res.redirect(req.session.returnTo || '/home/dashboard');
+});
 
 
 module.exports = router;
