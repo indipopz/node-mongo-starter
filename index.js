@@ -89,6 +89,9 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get('/', (req, res) => {
+    return res.redirect('/home')
+});
 app.use('/auth', authRoutes);
 app.use('/home', homeRoutes);
 

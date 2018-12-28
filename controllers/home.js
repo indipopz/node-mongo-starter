@@ -6,11 +6,9 @@
  */
 exports.getIndex = (req, res) => {
     if(!req.user){
-        return res.redirect('/auth/login')
+        return res.redirect('/auth/login');
     }
-    res.render('home/index', {
-        title: 'index'
-    });
+    return res.redirect('/home/dashboard');
 };
 
 
