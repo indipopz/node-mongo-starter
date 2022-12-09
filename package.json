@@ -20,7 +20,7 @@
     "connect-mongo": "^2.0.1",
     "crypto": "^1.0.1",
     "dotenv": "^6.1.0",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "express-flash": "0.0.2",
     "express-session": "^1.15.6",
     "express-status-monitor": "^1.2.3",
